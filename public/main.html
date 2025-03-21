@@ -3,33 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Website</title>
+    <title>Excel Data Form</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Welcome to Our Business</h1>
-    </header>
-
-    <div class="container">
-        <h2>Customer Information</h2>
-        <form id="dataForm">
-            <input type="text" id="name" placeholder="Full Name" required>
-            <select id="sex" required>
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-            </select>
-            <input type="number" id="age" placeholder="Age" required>
-            <input type="text" id="product" placeholder="Product Interested In" required>
-            <textarea id="message" placeholder="Additional Message (Optional)"></textarea>
-            <button type="submit">Submit</button>
-        </form>
-
-        <p id="response"></p>
-        <button id="downloadBtn">Download Excel</button>
-    </div>
+    <h1>Enter Data</h1>
+    <form id="dataForm">
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="number" id="age" placeholder="Age" required>
+        <input type="text" id="email" placeholder="Email" required>
+        <button type="submit">Submit</button>
+    </form>
+    <p id="responseMessage"></p>
+    <button id="downloadBtn">Download Excel</button>
 
     <script src="script.js"></script>
 </body>

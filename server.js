@@ -14,32 +14,27 @@ app.use(express.static('public'));
 
 // Load existing data from Excel
 let workbook;
-try {
-    if (fs.existsSync(DATA_FILE)) {
-        workbook = XLSX.readFile(DATA_FILE);
-    } else {
-        workbook = XLSX.utils.book_new();
-        workbook.SheetNames.push("Customers");
-        workbook.Sheets["Customers"] = XLSX.utils.aoa_to_sheet([["Name", "Gender", "Age", "Product", "Message", "Date"]]);
-        XLSX.writeFile(workbook, DATA_FILE);
-    }
-} catch (err) {
-    console.error("Error reading Excel file:", err);
+if (fs.existsSync(DATA_FILE)) {
+    workbook = XLSX.readFile(DATA_FILE);
+} else {
+    workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.aoa_to_sheet([["Name", "Age", "Email"]]);
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.writeFile(workbook, DATA_FILE);
 }
 
 // Handle form submission
 app.post('/submit', (req, res) => {
-    const { name, gender, age, product, message, date } = req.body;
-    if (!name || !gender || !age || !product) {
+    const { name, age, email } = req.body;
+    if (!name || !age || !email) {
         return res.status(400).json({ message: "All fields are required." });
     }
 
-    const newData = [[name, gender, age, product, message, date]];
-
-    const worksheet = workbook.Sheets["Customers"];
+    const newData = [[name, age, email]];
+    const worksheet = workbook.Sheets["Sheet1"];
     const existingData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
     existingData.push(...newData);
-    workbook.Sheets["Customers"] = XLSX.utils.aoa_to_sheet(existingData);
+    workbook.Sheets["Sheet1"] = XLSX.utils.aoa_to_sheet(existingData);
     XLSX.writeFile(workbook, DATA_FILE);
 
     res.json({ message: "Data submitted successfully!" });
