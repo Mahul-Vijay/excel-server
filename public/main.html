@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Website</title>
-    <link rel="stylesheet" href="styles.css"> <!-- 🟢 Correct path -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Welcome to Our Business</h1>
-    
+    <header>
+        <h1>Welcome to Our Business</h1>
+    </header>
+
     <div class="container">
         <h2>Customer Information</h2>
         <form id="dataForm">
@@ -25,10 +26,11 @@
             <textarea id="message" placeholder="Additional Message (Optional)"></textarea>
             <button type="submit">Submit</button>
         </form>
-        <button id="downloadBtn">Download Excel</button>
+
         <p id="response"></p>
+        <button id="downloadBtn">Download Excel</button>
     </div>
 
-    <script src="script.js"></script> <!-- 🟢 Correct path -->
+    <script src="script.js"></script>
 </body>
 </html>

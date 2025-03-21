@@ -1,91 +1,51 @@
-/* General Styles */
 body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
     background: linear-gradient(to right, #6a11cb, #2575fc);
     color: white;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
-/* Header Styling */
-h1 {
-    font-size: 36px;
+header {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    font-size: 24px;
     font-weight: bold;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Container with Glassmorphism */
 .container {
     max-width: 500px;
+    margin: 50px auto;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: transform 0.3s ease-in-out;
 }
 
-.container:hover {
-    transform: scale(1.02);
-}
-
-/* Form Styling */
 input, select, textarea, button {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     margin: 8px 0;
-    border-radius: 8px;
+    border-radius: 5px;
     border: none;
     outline: none;
     font-size: 16px;
 }
 
 input, select, textarea {
-    background: rgba(255, 255, 255, 0.8);
-    color: black;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.7);
 }
 
-input:focus, select:focus, textarea:focus {
-    background: white;
-    border: 1px solid #6a11cb;
-}
-
-/* Button Styling */
 button {
     background: #ff7eb3;
     color: white;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
+    transition: background 0.3s ease;
 }
 
 button:hover {
     background: #ff4a91;
-    transform: translateY(-2px);
-}
-
-/* Response Message */
-#response {
-    font-size: 16px;
-    margin-top: 10px;
-}
-
-/* Smooth Fade-in Animation */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.container, h1 {
-    animation: fadeIn 1s ease-in-out;
 }
