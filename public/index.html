@@ -1,22 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excel Data Form</title>
+    <title>Business Website</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Enter Data</h1>
-    <form id="dataForm">
-        <input type="text" id="name" placeholder="Name" required>
-        <input type="number" id="age" placeholder="Age" required>
-        <input type="text" id="email" placeholder="Email" required>
-        <button type="submit">Submit</button>
-    </form>
-    <p id="responseMessage"></p>
-    <button id="downloadBtn">Download Excel</button>
+    <h1>Welcome to Our Business</h1>
+    <div class="container">
+        <h2>Customer Information</h2>
+        <form id="dataForm">
+            <input type="text" id="name" placeholder="Full Name" required>
+            <select id="sex" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <input type="number" id="age" placeholder="Age" required>
+            <input type="text" id="product" placeholder="Product Interested In" required>
+            <textarea id="message" placeholder="Additional Message (Optional)"></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        <p id="response"></p>
+        <button id="downloadBtn">Download Excel</button>
+    </div>
 
-    <script src="script.js"></script>
+    <script>
+        document.getElementById('dataForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            try {
+                // Validate age
+                const ageInput = document.getElementById('age');
+                const age = parseInt(ageInput.value);
+                if (isNaN(age) || age < 1 || age > 120) throw new Error('Age must be between 1-120');
+
+                // Create data object
+                const newEntry = {
+                    Name: document.getElementById('name').value.trim(),
+                    Gender: document.getElementById('sex').value,
+                    Age: age,
+                    Product: document.getElementById('product').value.trim(),
+                    Message: document.getElementById('message').value.trim(),
+                    Date: new Date().toISOString()
+                };
+
+                fetch("https://excel-server-5mcb.onrender.com/submit", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(newEntry)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('response').innerHTML = `<strong>Success!</strong> ${data.message}`;
+                    document.getElementById('dataForm').reset();
+                })
+                .catch(error => {
+                    document.getElementById('response').innerHTML = `<strong>Error:</strong> ${error.message}`;
+                });
+
+            } catch (error) {
+                document.getElementById('response').innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        });
+
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            window.location.href = "https://excel-server-5mcb.onrender.com/download";
+        });
+    </script>
 </body>
 </html>
