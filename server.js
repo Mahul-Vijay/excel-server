@@ -2,64 +2,49 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const XLSX = require("xlsx");
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
 
-// Define Excel file path
-const FILE_PATH = "customer_data.xlsx";
-
-// Function to load existing data from Excel
-function loadExistingData() {
-    if (fs.existsSync(FILE_PATH)) {
-        const workbook = XLSX.readFile(FILE_PATH);
-        const sheet = workbook.Sheets["Customers"];
-        return XLSX.utils.sheet_to_json(sheet) || [];
-    }
-    return [];
-}
-
-// Endpoint to receive form data and update Excel file
+// Endpoint to save user data
 app.post("/submit", (req, res) => {
+    console.log("Received Data:", req.body);
+
     const { name, gender, age, product, message } = req.body;
+    
     if (!name || !gender || !age || !product) {
-        return res.status(400).json({ error: "All fields are required" });
+        return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const newEntry = {
-        Name: name.trim(),
-        Gender: gender,
-        Age: parseInt(age),
-        Product: product.trim(),
-        Message: message ? message.trim() : "",
-        Date: new Date().toLocaleString(),
-    };
+    const newEntry = { Name: name, Gender: gender, Age: age, Product: product, Message: message || "N/A", Date: new Date().toISOString() };
+    
+    let data = [];
+    if (fs.existsSync("data.xlsx")) {
+        const workbook = XLSX.readFile("data.xlsx");
+        const sheet = workbook.Sheets["Customers"];
+        data = XLSX.utils.sheet_to_json(sheet);
+    }
 
-    // Load existing data and append new entry
-    let customerData = loadExistingData();
-    customerData.push(newEntry);
+    data.push(newEntry);
 
-    // Convert data to worksheet and save
     const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.json_to_sheet(customerData);
+    const worksheet = XLSX.utils.json_to_sheet(data);
     XLSX.utils.book_append_sheet(workbook, worksheet, "Customers");
-    XLSX.writeFile(workbook, FILE_PATH);
+    XLSX.writeFile(workbook, "data.xlsx");
 
-    res.json({ success: true, message: "Data saved successfully!" });
+    res.json({ message: "Data saved successfully!" });
 });
 
-// Endpoint to download Excel file
+// Endpoint to download the Excel file
 app.get("/download", (req, res) => {
-    if (!fs.existsSync(FILE_PATH)) {
-        return res.status(404).json({ error: "No data found" });
+    const filePath = "data.xlsx";
+    if (fs.existsSync(filePath)) {
+        res.download(filePath);
+    } else {
+        res.status(404).json({ error: "File not found" });
     }
-    res.download(FILE_PATH);
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
